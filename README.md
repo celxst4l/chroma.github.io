@@ -1,77 +1,87 @@
-<div align="center">
+import React, { useRef } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Environment, Float, Center } from '@react-three/drei';
 
-# ⚡ CHROMA STUDIO ⚡
+// Individual Interactive 3D Card / Shape Component
+function ChromeWidget({ geometryType = 'roundedBox' }) {
+  const meshRef = useRef();
 
-**Forging digital realities through light, motion, and form.** <br>
-We are a multi-disciplinary creative collective specializing in high-end visual design, conceptual illustration, and cinematic motion effects.
+  // Subtle rotation animation loop that runs every single frame
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime();
+    if (meshRef.current) {
+      meshRef.current.rotation.x = Math.sin(time / 3) * 0.2;
+      meshRef.current.rotation.y = time * 0.15;
+    }
+  });
 
-[![Behance](https://img.shields.io/badge/Behance-1A1A1A?style=for-the-badge&logo=behance&logoColor=00FFFF)](#)
-[![YouTube](https://img.shields.io/badge/YouTube-1A1A1A?style=for-the-badge&logo=youtube&logoColor=FF00FF)](#)
-[![Discord](https://img.shields.io/badge/Discord-1A1A1A?style=for-the-badge&logo=discord&logoColor=00FFFF)](#)
-[![Email](https://img.shields.io/badge/Email-1A1A1A?style=for-the-badge&logo=minutemailer&logoColor=FF00FF)](#)
+  return (
+    // Float handles smooth, organic hovering physics up and down
+    <Float speed={3} rotationIntensity={0.5} floatIntensity={0.8}>
+      <mesh ref={meshRef} castShadow receiveShadow>
+        
+        {/* Dynamic Geometry Selector */}
+        {geometryType === 'torus' ? (
+          <torusKnotGeometry args={[0.8, 0.25, 160, 16]} />
+        ) : geometryType === 'sphere' ? (
+          <sphereGeometry args={[1, 64, 64]} />
+        ) : (
+          // Default sleek rounded display panel card
+          <boxGeometry args={[2.2, 1.4, 0.2]} />
+        )}
 
-</div>
+        {/* --- PREMIUM METALLIC CHROMATIC MATERIAL --- */}
+        <meshPhysicalMaterial
+          color="#f4f7fc"               // Clear mirror titanium base tint
+          roughness={0.01}              // Ultra-glossy, flawless reflective surface
+          metalness={1.0}              // 100% metallic properties
+          clearcoat={1.0}              // Secondary hard outer clear lacquer shell
+          clearcoatRoughness={0.0}
+          
+          // --- OIL-SLICK CHROMATIC GRADIENT ENGINE ---
+          iridescence={1.0}            // Activates shifting rainbow refraction
+          iridescenceIOR={2.1}         // High Index of Refraction for deep gradient bands
+          iridescenceThicknessRange={[100, 600]} // Blends the magenta-to-cyan color transitions
+          
+          // --- HIGHLIGHT INTENSITY ---
+          envMapIntensity={3.5}        // Drastically brightens the gradient reflections
+        />
+      </mesh>
+    </Float>
+  );
+}
 
----
+// Main Canvas Layout Configuration
+export default function App() {
+  return (
+    <div style={{ width: '100vw', height: '100vh', background: '#050507', overflow: 'hidden' }}>
+      <Canvas camera={{ position: [0, 0, 4.5], fov: 45 }}>
+        
+        {/* Deep background ambient space so reflections stand out */}
+        <ambientLight intensity={0.1} />
+        
+        {/* --- THE CHROMATIC STUDIO LIGHT CAGE --- */}
+        {/* Front-Left Accent: High-energy Neon Cyan Light */}
+        <directionalLight position={[-8, 6, 4]} intensity={3.0} color="#00ffff" />
+        
+        {/* Front-Right Accent: High-contrast Hot Magenta Light */}
+        <directionalLight position={[8, -6, 3]} intensity={3.5} color="#ff00ff" />
+        
+        {/* Top/Back Rim Accent: Royal Electric Purple for edge popping */}
+        <directionalLight position={[0, 8, -4]} intensity={2.5} color="#7b00ff" />
+        
+        {/* --- WIDGET DISPLAY LAYOUT --- */}
+        <Center>
+          {/* You can duplicate this or map over your divisions (Youssef, Samah, Akiro) */}
+          <group position={[0, 0, 0]}>
+            <ChromeWidget geometryType="torus" />
+          </group>
+        </Center>
 
-### 🎨 Youssef — Graphic Effects & Design
-
-*Defining the visual identity of the digital age.*
-
-**Specialties:**
-- ⬡ Branding & Visual Identity
-- ⬡ High-Impact Thumbnails
-- ⬡ UI / UX Design
-- ⬡ Experimental Typography
-
-**Tools:** ![Photoshop](https://img.shields.io/badge/Photoshop-71797E?style=flat-square&logo=adobephotoshop&logoColor=00FFFF)
-![Illustrator](https://img.shields.io/badge/Illustrator-71797E?style=flat-square&logo=adobeillustrator&logoColor=FF00FF)
-![Figma](https://img.shields.io/badge/Figma-71797E?style=flat-square&logo=figma&logoColor=00FFFF)
-
----
-
-### 🖌️ Samah — Fine Illustration & Concept Art
-
-*Breathing life into characters and worlds.*
-
-**Specialties:**
-- ⬡ Character Design & Turnarounds
-- ⬡ Detailed Digital Painting
-- ⬡ Environment & Concept Art
-- ⬡ Storyboarding
-
-**Tools:** ![Procreate](https://img.shields.io/badge/Procreate-71797E?style=flat-square&logo=procreate&logoColor=FF00FF)
-![Clip Studio Paint](https://img.shields.io/badge/Clip_Studio_Paint-71797E?style=flat-square&logo=clipstudiopaint&logoColor=00FFFF)
-![Krita](https://img.shields.io/badge/Krita-71797E?style=flat-square&logo=krita&logoColor=FF00FF)
-
----
-
-### 🎬 Akiro — Video Editing & Motion Effects
-
-*Sculpting time, motion, and cinematic sequences.*
-
-**Specialties:**
-- ⬡ Motion Graphics & Kinetic Typography
-- ⬡ Visual Effects & Compositing
-- ⬡ 3D Animation
-- ⬡ Cinematic Editing & Color Grading
-
-**Tools:** ![After Effects](https://img.shields.io/badge/After_Effects-71797E?style=flat-square&logo=adobeaftereffects&logoColor=00FFFF)
-![Premiere Pro](https://img.shields.io/badge/Premiere_Pro-71797E?style=flat-square&logo=adobepremierepro&logoColor=FF00FF)
-![Blender](https://img.shields.io/badge/Blender-71797E?style=flat-square&logo=blender&logoColor=00FFFF)
-![DaVinci Resolve](https://img.shields.io/badge/DaVinci_Resolve-71797E?style=flat-square&logo=davinciresolve&logoColor=FF00FF)
-
----
-
-### 🌌 CHROMA COLLECTIVE SHOWCASE
-
-> **[🔥 NEON OVERDRIVE - 2025 Studio Showreel](#)**
-> A high-octane collaborative cinematic reel combining Akiro's precision editing, Samah's original IP characters, and Youssef's striking UI/brand overlays.
-
-> **[💠 PROJECT: OBLIVION - Case Study](#)**
-> Complete world-building and brand package for an upcoming indie cyberpunk title, featuring full concept art pipelines and promotional VFX trailers.
-
-> **[⚡ CHROMA ASSETS VOL. 1 - Open Source](#)**
-> A digital asset pack featuring chrome textures, neon brushes, and essential motion presets created from the ground up by the entire studio.
-
----
+        {/* Real studio reflection environment profiles */}
+        <Environment preset="studio" />
+        
+      </Canvas>
+    </div>
+  );
+}
